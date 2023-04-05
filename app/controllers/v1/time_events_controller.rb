@@ -1,20 +1,19 @@
 module V1
   class TimeEventsController < ApplicationController
-    before_action :set_user
     before_action :set_time_event, only: [:show]
 
     def index
-      @time_events = @user.time_events.order(:created_at)
+      @time_events = current_user.time_events.order(:created_at)
       render json: { success: true, data: @time_events }
     end
 
     def create
-      @time_event = @user.time_events.new(time_event_params)
+      @time_event = current_user.time_events.new(time_event_params)
 
       if @time_event.save
         render json: { success: true, data: @time_events }, status: :created
       else
-        render json: { success: true, message: @time_event.errors }, status: :unprocessable_entity
+        render json: { success: false, message: @time_event.errors }, status: :unprocessable_entity
       end
     end
 

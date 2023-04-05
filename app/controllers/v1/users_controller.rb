@@ -18,7 +18,7 @@ module V1
       if @user.save
         render json: { success: true, data: @user }, status: :created
       else
-        render json: { success: true, message: @user.errors }, status: :unprocessable_entity
+        render json: { success: false, message: @user.errors }, status: :unprocessable_entity
       end
     end
 
