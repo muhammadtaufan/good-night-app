@@ -1,24 +1,36 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# GoodNight App
+Simple Rails API to track sleep time and wake up time
 
-Things you may want to cover:
+## Getting Started
+### Prerequisites
+```
+Ruby version 3.0.0
+Rails version 7.0.3
+```
 
-* Ruby version
+### Installing
 
-* System dependencies
+- Clone the repo
+```
+git clone https://github.com/muhammadtaufan/good-night-app.git
+```
+- Install dependencies & Migration
 
-* Configuration
+```
+bundle install
+cp config/application.yml.sample config/application.yml
+rails db:migrate
+```
 
-* Database creation
+### Usage
+Run the server
+```
+rails s
+```
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+### Run the tests
+```
+rspec
+```
