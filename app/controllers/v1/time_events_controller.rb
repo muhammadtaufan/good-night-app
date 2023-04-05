@@ -7,11 +7,23 @@ module V1
       render json: { success: true, data: @time_events }
     end
 
-    def create
+    def sleep
       @time_event = current_user.time_events.new(time_event_params)
+      @time_event.is_time_in = true
 
       if @time_event.save
-        render json: { success: true, data: @time_events }, status: :created
+        render json: { success: true, data: @time_event }, status: :created
+      else
+        render json: { success: false, message: @time_event.errors }, status: :unprocessable_entity
+      end
+    end
+
+    def wake_up
+      @time_event = current_user.time_events.new(time_event_params)
+      @time_event.is_time_in = false
+
+      if @time_event.save
+        render json: { success: true, data: @time_event }, status: :created
       else
         render json: { success: false, message: @time_event.errors }, status: :unprocessable_entity
       end
@@ -35,7 +47,7 @@ module V1
     end
 
     def time_event_params
-      params.require(:time_event).permit(:event_time, :is_time_in)
+      params.require(:time_event).permit(:event_time)
     end
   end
 end
