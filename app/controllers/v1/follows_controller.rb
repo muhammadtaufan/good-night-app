@@ -3,13 +3,16 @@ module V1
     before_action :set_user, only: %i[create destroy]
 
     def create
-      current_user = User.find(5)
-      current_user.follow(@user)
-      render json: { success: true, message: 'User followed' }
+      message = current_user.follow(@user)
+
+      if message == 'User followed'
+        render json: { success: true, message: message }
+      else
+        render json: { success: false, message: message }, status: :unprocessable_entity
+      end
     end
 
     def destroy
-      current_user = User.find(5)
       current_user.unfollow(@user)
       render json: { success: true, message: 'User unfollowed' }
     end

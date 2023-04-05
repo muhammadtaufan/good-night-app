@@ -9,8 +9,13 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
+  before_create :generate_auth_token
+
   def follow(user)
+    return 'Already following this user' if following?(user)
+
     followed_users << user
+    'User followed'
   end
 
   def unfollow(user)
@@ -19,5 +24,12 @@ class User < ApplicationRecord
 
   def following?(user)
     followed_users.include?(user)
+  end
+
+  def generate_auth_token
+    loop do
+      self.auth_token = SecureRandom.hex(20)
+      break unless User.exists?(auth_token: auth_token)
+    end
   end
 end
