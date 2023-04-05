@@ -5,21 +5,21 @@ module V1
 
     def index
       @time_events = @user.time_events.order(:created_at)
-      render json: @time_events
+      render json: { success: true, data: @time_events }
     end
 
     def create
       @time_event = @user.time_events.new(time_event_params)
 
       if @time_event.save
-        render json: @time_event, status: :created
+        render json: { success: true, data: @time_events }, status: :created
       else
-        render json: @time_event.errors, status: :unprocessable_entity
+        render json: { success: true, message: @time_event.errors }, status: :unprocessable_entity
       end
     end
 
     def show
-      render json: @time_event
+      render json: { success: true, data: @time_event }
     end
 
     private

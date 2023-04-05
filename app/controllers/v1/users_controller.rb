@@ -5,20 +5,20 @@ module V1
 
     def index
       @users = User.all
-      render json: @users
+      render json: { success: true, data: @users }
     end
 
     def show
-      render json: @user
+      render json: { success: true, data: @user }
     end
 
     def create
       @user = User.new(user_params)
 
       if @user.save
-        render json: { user: @user }, status: :created
+        render json: { success: true, data: @user }, status: :created
       else
-        render json: @user.errors, status: :unprocessable_entity
+        render json: { success: true, message: @user.errors }, status: :unprocessable_entity
       end
     end
 
