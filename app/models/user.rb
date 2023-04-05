@@ -32,4 +32,33 @@ class User < ApplicationRecord
       break unless User.exists?(auth_token: auth_token)
     end
   end
+
+  def weekly_event_summary(start_date)
+    followed_users_ids = followed_users.pluck(:id)
+
+    time_entries = TimeEvent
+                   .includes(:user)
+                   .where(user_id: followed_users_ids,
+                          event_time: start_date.beginning_of_day..(start_date + 6.days).end_of_day).order(:event_time)
+                   .pluck(
+                     :id, :event_time
+                   )
+
+    time_entries.chunk_while { |prev, curr| prev[1].to_date == curr[1].to_date }.map do |entries|
+      next if entries.size != 2
+
+      (temp_id, time_in), (_, time_out) = entries
+
+      {
+        id: temp_id,
+        duration: ((time_out - time_in) / 60).to_i,
+        sleep_time: time_in,
+        wake_up: time_out
+      }
+    end.compact.group_by { |entry| entry[:sleep_time].to_date }.transform_values do |entries|
+      entries.sort_by do |entry|
+        entry[:duration]
+      end
+    end
+  end
 end

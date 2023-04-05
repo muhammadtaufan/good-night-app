@@ -21,11 +21,14 @@ module V1
       render json: { success: true, data: @time_event }
     end
 
-    private
+    def weekly_time_summary
+      start_date = params[:start_date].to_date
+      event_weekly_summaries = current_user.weekly_event_summary(start_date)
 
-    def set_user
-      @user = User.find(params[:user_id])
+      render json: { success: true, data: event_weekly_summaries }
     end
+
+    private
 
     def set_time_event
       @time_event = TimeEvent.find(params[:id])
