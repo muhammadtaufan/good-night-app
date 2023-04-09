@@ -4,7 +4,7 @@ module V1
 
     def index
       @time_events = current_user.time_events.order(:created_at)
-      render json: { success: true, data: @time_events }
+      json_success_response(@time_events)
     end
 
     def sleep
@@ -12,9 +12,9 @@ module V1
       @time_event.is_time_in = true
 
       if @time_event.save
-        render json: { success: true, data: @time_event }, status: :created
+        json_success_response(@time_event, :created)
       else
-        render json: { success: false, message: @time_event.errors }, status: :unprocessable_entity
+        json_error_response(@time_event.errors, :unprocessable_entity)
       end
     end
 
@@ -23,21 +23,21 @@ module V1
       @time_event.is_time_in = false
 
       if @time_event.save
-        render json: { success: true, data: @time_event }, status: :created
+        json_success_response(@time_event, :created)
       else
-        render json: { success: false, message: @time_event.errors }, status: :unprocessable_entity
+        json_error_response(@time_event.errors, :unprocessable_entity)
       end
     end
 
     def show
-      render json: { success: true, data: @time_event }
+      json_success_response(@time_event)
     end
 
     def weekly_time_summary
       start_date = params[:start_date].to_date
       event_weekly_summaries = current_user.weekly_event_summary(start_date)
 
-      render json: { success: true, data: event_weekly_summaries }
+      json_success_response(event_weekly_summaries)
     end
 
     private

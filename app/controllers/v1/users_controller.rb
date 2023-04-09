@@ -5,11 +5,11 @@ module V1
 
     def index
       @users = User.all
-      render json: { success: true, data: @users }
+      json_success_response(@users)
     end
 
     def show
-      render json: { success: true, data: @user }
+      json_success_response(@user)
     end
 
     def create
@@ -17,8 +17,9 @@ module V1
 
       if @user.save
         render json: { success: true, data: @user }, status: :created
+        json_success_response(@user, :created)
       else
-        render json: { success: false, message: @user.errors }, status: :unprocessable_entity
+        json_error_response(@user.errors)
       end
     end
 

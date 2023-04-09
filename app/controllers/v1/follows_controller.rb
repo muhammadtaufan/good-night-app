@@ -6,15 +6,15 @@ module V1
       message = current_user.follow(@user)
 
       if message == 'User followed'
-        render json: { success: true, message: message }
+        json_success_response(nil, :ok, message)
       else
-        render json: { success: false, message: message }, status: :unprocessable_entity
+        json_error_response('Something wrong, please try again')
       end
     end
 
     def destroy
       current_user.unfollow(@user)
-      render json: { success: true, message: 'User unfollowed' }
+      json_success_response(nil, :ok, 'User unfollowed')
     end
 
     private
