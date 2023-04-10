@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'pry'
 
 RSpec.describe V1::UsersController, type: :controller do
   let!(:user_list) { create_list(:user, 5) }

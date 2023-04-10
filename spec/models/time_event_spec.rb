@@ -19,4 +19,15 @@ RSpec.describe TimeEvent, type: :model do
       expect(time_event.sleep_time?).to eq true
     end
   end
+
+  describe 'wake up time validation' do
+    let!(:user) { create(:user) }
+
+    it 'returns an error if the wake up time didnt have sleep time' do
+      wake_up_time = build(:time_event, user: user, is_time_in: false)
+      wake_up_time.save
+
+      expect(wake_up_time).to_not be_valid
+    end
+  end
 end
