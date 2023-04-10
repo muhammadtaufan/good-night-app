@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   before_action :authenticate_user!
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def current_user
     return @current_user if @current_user
@@ -25,5 +26,9 @@ class ApplicationController < ActionController::API
 
   def json_error_response(message, status = :unprocessable_entity)
     render json: { success: false, message: message }, status: status
+  end
+
+  def record_not_found
+    json_error_response('Data not found', :not_found)
   end
 end

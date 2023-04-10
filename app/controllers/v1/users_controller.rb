@@ -1,6 +1,6 @@
 module V1
   class UsersController < ApplicationController
-    before_action :authenticate_user!, except: [:create]
+    before_action :authenticate_user!, except: %i[create index]
     before_action :set_user, only: [:show]
 
     def index
@@ -16,7 +16,6 @@ module V1
       @user = User.new(user_params)
 
       if @user.save
-        render json: { success: true, data: @user }, status: :created
         json_success_response(@user, :created)
       else
         json_error_response(@user.errors)
