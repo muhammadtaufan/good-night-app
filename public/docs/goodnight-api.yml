@@ -1,0 +1,278 @@
+openapi: 3.0.0
+info:
+  title: GoodNight
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /v1/users/{id}/unfollow:
+    delete:
+      tags:
+        - default
+      summary: Unfollow User
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: c0eb72286f7d80f44c8fdb600dfdb99fefb18775
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                      type: boolean
+                  message:
+                      type: string
+  /v1/users/{id}/follow:
+    post:
+      tags:
+        - default
+      summary: Follow User
+      requestBody:
+        content: {}
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: c0eb72286f7d80f44c8fdb600dfdb99fefb18775
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                        type: boolean
+                    message:
+                        type: string
+  /v1/users:
+    get:
+      tags:
+        - default
+      summary: List User
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: c0eb72286f7d80f44c8fdb600dfdb99fefb18775
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                        type: boolean
+                    data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+    post:
+      tags:
+        - default
+      summary: Add User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: smith
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: c0eb72286f7d80f44c8fdb600dfdb99fefb18775
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                        type: boolean
+                    data:
+                        $ref: '#/components/schemas/User'
+  /v1/time_events/:
+    get:
+      tags:
+        - default
+      summary: List Time Events
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: c0eb72286f7d80f44c8fdb600dfdb99fefb18775
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                        type: boolean
+                    data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TimeEvent'
+  /v1/time_events/sleep:
+    post:
+      tags:
+        - default
+      summary: Sleep Time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                time_event:
+                  event_time: '2023-04-10T09:00:00'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: c0eb72286f7d80f44c8fdb600dfdb99fefb18775
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                        type: boolean
+                    data:
+                        $ref: '#/components/schemas/TimeEvent'
+  /v1/time_events/wake_up:
+    post:
+      tags:
+        - default
+      summary: Wake-Up Time
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                time_event:
+                  event_time: '2023-04-11T13:00:00'
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: c0eb72286f7d80f44c8fdb600dfdb99fefb18775
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                        type: boolean
+                    data:
+                        $ref: '#/components/schemas/TimeEvent'
+  /v1/time_events/weekly_time_summary:
+    get:
+      tags:
+        - default
+      summary: Event Weekly Summaries
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: c0eb72286f7d80f44c8fdb600dfdb99fefb18775
+        - name: start_date
+          in: query
+          schema:
+            type: string
+          example: '2023-04-03'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: An object with date keys (YYYY-MM-DD) and an array of SleepEvent objects as values.
+                additionalProperties:
+                  type: array
+                  items:
+                      $ref: '#/components/schemas/TimeEventSummary'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: smith
+    TimeEvent:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 8
+        user_id:
+          type: integer
+          example: 8
+        event_time:
+          type: string
+          format: date-time
+          example: '2023-04-05T09:00:00.000Z'
+        is_time_in:
+          type: boolean
+          example: true
+    TimeEventSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        duration:
+          type: integer
+          example: 240
+        sleep_time:
+          type: string
+          format: date-time
+          example: '2023-04-03T08:00:00.000Z'
+        wake_up:
+          type: string
+          format: date-time
+          example: '2023-04-03T12:00:00.000Z'

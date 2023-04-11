@@ -34,3 +34,8 @@ rails s
 ```
 rspec
 ```
+### API Docs
+
+```
+{{BASE_URL}}/swagger-ui
+```
